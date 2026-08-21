@@ -6,17 +6,16 @@ from .database import Base
 
 
 class SubjectType(str, enum.Enum):
-    """NCEA Subject types."""
+    """NCEA English Subject type."""
     ENGLISH = "english"
-    HISTORY = "history"
-    DIGITAL_TECHNOLOGIES = "digital_technologies"
 
 
 class LevelType(int, enum.Enum):
-    """NCEA Level types."""
+    """NCEA Level types including Scholarship."""
     LEVEL_1 = 1
     LEVEL_2 = 2
     LEVEL_3 = 3
+    SCHOLARSHIP = 4  # Special level for Scholarship
 
 
 class GradeType(str, enum.Enum):

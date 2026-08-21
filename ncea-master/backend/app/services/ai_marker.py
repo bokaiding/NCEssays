@@ -164,33 +164,36 @@ Your exemplar should demonstrate perceptive understanding, comprehensive analysi
         self,
         question: str,
         subject: str,
-        framework: str = "PETAL"
+        framework: str = "PETAL",
+        level: int = None
     ) -> Dict[str, Any]:
         """Break down a complex question into smaller steps using a framework."""
         
-        if subject == "english":
-            from ..prompts.system_prompts import PETAL_FRAMEWORK_PROMPT as FRAMEWORK_PROMPT
-            framework_name = "PETAL"
-        elif subject == "digital_technologies":
-            from ..prompts.system_prompts import IDEAR_FRAMEWORK_PROMPT as FRAMEWORK_PROMPT
-            framework_name = "IDEAR"
+        # Always use PETAL or CAPTE for English
+        if framework.upper() == "CAPTE":
+            from ..prompts.system_prompts import CAPTE_FRAMEWORK_PROMPT as FRAMEWORK_PROMPT
+            framework_name = "CAPTE"
         else:
-            # Default to PETAL for history/general
             from ..prompts.system_prompts import PETAL_FRAMEWORK_PROMPT as FRAMEWORK_PROMPT
             framework_name = "PETAL"
         
+        level_context = f"Level {level}" if level else ""
+        if level == "scholarship":
+            level_context = "Scholarship"
+        
         user_prompt = f"""
-Break down this NCEA question using the {framework_name} framework:
+Break down this NCEA English question using the {framework_name} framework:
 
 Question: {question}
-Subject: {subject}
+{level_context}
 
 Provide:
-1. What the question is asking
+1. What the question is asking (identify command words and key concepts)
 2. How to approach it using {framework_name}
-3. Example points for each step
-4. Common mistakes to avoid
-5. Tips for achieving Excellence
+3. Example points for each step of {framework_name}
+4. Common mistakes to avoid at this level
+5. Tips for achieving Excellence (or Scholarship distinction)
+6. Grade-level expectations (what's needed for A/M/E)
 """
         
         breakdown = await llm_client.generate_completion(

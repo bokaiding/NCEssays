@@ -38,10 +38,10 @@ class QuestionGeneratorService:
         
         # Build the generation prompt
         user_prompt = f"""
-Generate an NCEA practice question with these specifications:
+Generate an NCEA English practice question with these specifications:
 
-- Subject: {subject}
-- Level: {level}
+- Subject: English (NCEA)
+- Level: {level} {'(Scholarship)' if level == 'scholarship' else level}
 - Question Type: {question_type}
 - Achievement Standard: {standard_code if standard_code else "General"}
 
@@ -50,15 +50,17 @@ Generate an NCEA practice question with these specifications:
 {"TEXT TO ANALYZE:\n" + text_content if text_content else ""}
 
 Requirements:
-1. Use authentic NCEA wording and formatting
+1. Use authentic NCEA English wording and formatting
 2. Include clear instructions and context
 3. Ensure the question allows students to demonstrate skills at all grade levels (A/M/E)
 4. Include time recommendations
 5. Provide the achievement standard code and name if applicable
 
-For Unfamiliar Texts: Include analysis questions about language features
-For History: Include source analysis or causal reasoning questions
-For Digital Technologies: Include scenario-based technical questions
+For Unfamiliar Texts: Include analysis questions about language features using PETAL/CAPTE framework
+For Written Texts: Include questions requiring critical response to characters, themes, or authorial choices
+For Visual/Oral Texts: Include questions about visual/oral techniques and their effects
+For Writing: Provide clear prompts specifying purpose and audience
+For Scholarship: Create complex, multi-layered questions requiring original critical thinking
 """
         
         question_text = await llm_client.generate_completion(
